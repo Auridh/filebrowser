@@ -79,7 +79,7 @@ func resourceDeleteHandler(fileCache FileCache) handleFunc {
 			return errToStatus(err), err
 		}
 
-		err = d.RunHook(func() error {
+		err = d.Runner.RunHook(func() error {
 			return d.user.Fs.RemoveAll(r.URL.Path)
 		}, "delete", r.URL.Path, "", d.user)
 
@@ -127,7 +127,7 @@ func resourcePostHandler(fileCache FileCache) handleFunc {
 			}
 		}
 
-		err = d.RunHook(func() error {
+		err = d.Runner.RunHook(func() error {
 			info, writeErr := writeFile(d.user.Fs, r.URL.Path, r.Body)
 			if writeErr != nil {
 				return writeErr
