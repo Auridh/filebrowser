@@ -1,4 +1,4 @@
-import { createURL, fetchURL, removePrefix } from "./utils";
+import { createURL, fetchURL, getQueryParams, removePrefix, removeQueryParams } from "./utils";
 import { baseURL } from "@/utils/constants";
 import { useAuthStore } from "@/stores/auth";
 import { upload as postTus, useTus } from "./tus";
@@ -108,7 +108,8 @@ async function postResources(
   overwrite = false,
   onupload: any
 ) {
-  url = removePrefix(url);
+  const queryParams = getQueryParams(url);
+  url = removeQueryParams(removePrefix(url));
 
   let bufferContent: ArrayBuffer;
   if (
@@ -123,7 +124,7 @@ async function postResources(
     const request = new XMLHttpRequest();
     request.open(
       "POST",
-      `${baseURL}/api/resources${url}?override=${overwrite}`,
+      createURL(`api/resources${url}`, {...queryParams, "override": overwrite}, false),
       true
     );
     request.setRequestHeader("X-Auth", authStore.jwt);

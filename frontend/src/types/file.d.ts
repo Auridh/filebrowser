@@ -57,3 +57,10 @@ interface BreadCrumb {
   name: string;
   url: string;
 }
+
+type NewFileTemplate = {
+  name: string,
+  extension: string,
+  dataType?: string,
+  template?: string,
+};

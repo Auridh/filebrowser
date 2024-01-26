@@ -96,3 +96,20 @@ export function createURL(endpoint: string, params = {}, auth = true): string {
 
   return url.toString();
 }
+
+export function removeQueryParams(url: string) {
+  return url.split('?')[0];
+}
+
+export function getQueryParams(url: string) {
+  const queryString = url.split('?')[1] || '';
+  const queryParams = new URLSearchParams(queryString);
+
+  const queryParamsMap = {};
+  queryParams.forEach(function(value, key) {
+    // @ts-ignore
+    queryParamsMap[key] = value;
+  });
+
+  return queryParamsMap;
+}
