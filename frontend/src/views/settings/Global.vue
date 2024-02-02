@@ -161,6 +161,10 @@
               id="onlyoffice-jwt"
             />
           </p>
+          <p>
+            <input type="checkbox" v-model="settings.onlyoffice.fullViewport" />
+            {{ $t("settings.onlyOfficeFullViewport") }}
+          </p>
         </div>
 
         <div class="card-action">

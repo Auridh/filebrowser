@@ -37,7 +37,7 @@ import { storeToRefs } from "pinia";
 import { useFileStore } from "@/stores/file";
 import { useLayoutStore } from "@/stores/layout";
 import { useUploadStore } from "@/stores/upload";
-import { onlyOfficeUrl } from "@/utils/constants";
+import { onlyOffice } from "@/utils/constants";
 
 import HeaderBar from "@/components/header/HeaderBar.vue";
 import Breadcrumbs from "@/components/Breadcrumbs.vue";
@@ -79,7 +79,7 @@ const currentView = computed(() => {
     fileStore.req.type === "textImmutable"
   ) {
     return Editor;
-  } else if (fileStore.req.type === "officedocument" && onlyOfficeUrl !== "") {
+  } else if (fileStore.req.type === "officedocument" && onlyOffice.url) {
     return OnlyOfficeEditor;
   } else {
     return Preview;
