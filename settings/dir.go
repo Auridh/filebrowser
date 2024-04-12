@@ -21,16 +21,21 @@ var (
 // MakeUserDir makes the user directory according to settings.
 func (s *Settings) MakeUserDir(username, userScope, serverRoot string) (string, error) {
 	userScope = strings.TrimSpace(userScope)
-	if userScope == "" && s.CreateUserDir {
+
+	if s.UserHomeBasePath == "" {
+		userScope = path.Join("/", userScope)
+	} else {
+		userScope = path.Join(s.UserHomeBasePath, userScope)
+	}
+
+	if s.CreateUserDir {
 		username = cleanUsername(username)
 		if username == "" || username == "-" || username == "." {
 			log.Printf("create user: invalid user for home dir creation: [%s]", username)
 			return "", errors.New("invalid user for home dir creation")
 		}
-		userScope = path.Join(s.UserHomeBasePath, username)
+		userScope = path.Join(userScope, username)
 	}
-
-	userScope = path.Join("/", userScope)
 
 	fs := afero.NewBasePathFs(afero.NewOsFs(), serverRoot)
 	if err := fs.MkdirAll(userScope, os.ModePerm); err != nil {
