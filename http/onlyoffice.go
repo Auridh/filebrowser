@@ -58,7 +58,7 @@ var onlyofficeClientConfigGetHandler = withUser(func(w http.ResponseWriter, r *h
 		return http.StatusInternalServerError, errors.Join(errors.New("could not determine request referrer"), err)
 	}
 
-	file, err := files.NewFileInfo(files.FileOptions{
+	file, err := files.NewFileInfo(&files.FileOptions{
 		Fs:         d.user.Fs,
 		Path:       r.URL.Path,
 		Modify:     d.user.Perm.Modify,
