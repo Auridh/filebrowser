@@ -2,10 +2,12 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	fbErrors "github.com/Auridh/filebrowser/v2/errors"
 	"github.com/Auridh/filebrowser/v2/settings"
 	"github.com/Auridh/filebrowser/v2/users"
 	"github.com/sethvargo/go-password/password"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -37,11 +39,21 @@ func (a ProxyAuth) Auth(r *http.Request, usr users.Store, set *settings.Settings
 			Commands:     set.Defaults.Commands,
 			HideDotfiles: set.Defaults.HideDotfiles,
 		})
+
 		if err != nil {
 			return nil, err
 		}
 
 		user, err = usr.Get(srv.Root, username)
+		if err != nil {
+			return user, err
+		}
+
+		home, err := set.MakeUserDir(user.Username, user.Scope, srv.Root)
+		if err != nil {
+			return nil, fmt.Errorf("user: failed to mkdir user home dir: [%s]", home)
+		}
+		log.Printf("user: %s, home dir: [%s].", user.Username, home)
 	}
 
 	return user, err
