@@ -58,6 +58,7 @@ import { computed, inject, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { StatusError } from "@/api/utils";
+import { isNil } from "lodash-es";
 
 const error = ref<StatusError>();
 const originalUser = ref<IUser>();
@@ -118,8 +119,10 @@ const fetchData = async () => {
 const deletePrompt = () =>
   layoutStore.showHover({ prompt: "deleteUser", confirm: deleteUser });
 
-const deleteUser = async (e: Event) => {
-  e.preventDefault();
+const deleteUser = async (event: Event) => {
+  if (!isNil(event)) {
+    event.preventDefault();
+  }
   if (!user.value) {
     return false;
   }
