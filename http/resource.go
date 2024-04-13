@@ -15,10 +15,10 @@ import (
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/spf13/afero"
 
-	fbErrors "github.com/filebrowser/filebrowser/v2/errors"
-	"github.com/filebrowser/filebrowser/v2/files"
-	"github.com/filebrowser/filebrowser/v2/fileutils"
-	"github.com/filebrowser/filebrowser/v2/templates"
+	fbErrors "github.com/Auridh/filebrowser/v2/errors"
+	"github.com/Auridh/filebrowser/v2/files"
+	"github.com/Auridh/filebrowser/v2/fileutils"
+	"github.com/Auridh/filebrowser/v2/templates"
 )
 
 var resourceGetHandler = withUser(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {

@@ -12,8 +12,8 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	fbErrors "github.com/filebrowser/filebrowser/v2/errors"
-	"github.com/filebrowser/filebrowser/v2/users"
+	fbErrors "github.com/Auridh/filebrowser/v2/errors"
+	"github.com/Auridh/filebrowser/v2/users"
 )
 
 var (

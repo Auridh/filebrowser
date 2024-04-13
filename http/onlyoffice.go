@@ -14,7 +14,7 @@ import (
 	"github.com/allegro/bigcache"
 	"github.com/golang-jwt/jwt/v4"
 
-	"github.com/filebrowser/filebrowser/v2/files"
+	"github.com/Auridh/filebrowser/v2/files"
 )
 
 const (
