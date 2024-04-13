@@ -11,7 +11,7 @@ import ProfileSettings from "@/views/settings/Profile.vue";
 import Shares from "@/views/settings/Shares.vue";
 import Errors from "@/views/Errors.vue";
 import { useAuthStore } from "@/stores/auth";
-import { baseURL, name } from "@/utils/constants";
+import { authMethod, baseURL, name } from "@/utils/constants";
 import i18n from "@/i18n";
 import { recaptcha, loginPage } from "@/utils/constants";
 import { login, validateLogin } from "@/utils/auth";
@@ -149,10 +149,10 @@ const routes = [
   },
 ];
 
-async function initAuth(to: RouteLocationNormalized) {
+async function initAuth() {
   if (loginPage) {
     await validateLogin();
-  } else if (!to.path.startsWith("/share/")) {
+  } else {
     await login("", "", "");
   }
 
@@ -183,9 +183,9 @@ router.beforeResolve(async (to, from, next) => {
   const authStore = useAuthStore();
 
   // this will only be null on first route
-  if (from.name == null) {
+  if (from.name == null && !to.path.startsWith("/share/")) {
     try {
-      await initAuth(to);
+      await initAuth();
     } catch (error) {
       console.error(error);
     }
@@ -193,6 +193,11 @@ router.beforeResolve(async (to, from, next) => {
 
   if (to.path.endsWith("/login") && authStore.isLoggedIn) {
     next({ path: "/files/" });
+    return;
+  }
+
+  if (to.path.endsWith("/login") && authMethod == "proxy") {
+    window.location.reload();
     return;
   }
 
