@@ -7,7 +7,7 @@
     <div class="card-content">
       <span v-if="onlyOffice.url">
         <div
-          v-for="option in this.typeOptions"
+          v-for="option in typeOptions"
           class="card filetype-option file-icons"
           :class="{selected: selectedTypeOption == option, [option.name]: true}"
           @click="selectedTypeOption = option">
