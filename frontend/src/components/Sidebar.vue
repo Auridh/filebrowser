@@ -61,7 +61,7 @@
       <router-link
         class="action"
         to="/login"
-        :key="$route.path"
+        :key="$route.fullPath"
         :aria-label="$t('sidebar.login')"
         :title="$t('sidebar.login')"
       >
@@ -73,7 +73,7 @@
         v-if="signup"
         class="action"
         to="/login"
-        :key="$route.path"
+        :key="$route.fullPath"
         :aria-label="$t('sidebar.signup')"
         :title="$t('sidebar.signup')"
       >

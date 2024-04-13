@@ -1,4 +1,4 @@
-import { RouteLocation, createRouter, createWebHistory } from "vue-router";
+import { RouteLocation, createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
 import Login from "@/views/Login.vue";
 import Layout from "@/views/Layout.vue";
 import Files from "@/views/Files.vue";
@@ -149,23 +149,25 @@ const routes = [
   },
 ];
 
-async function initAuth() {
+async function initAuth(to: RouteLocationNormalized) {
   if (loginPage) {
     await validateLogin();
+  } else if (!to.path.startsWith("/share/")) {
+    await login("", "", "");
+  }
 
-    if (recaptcha) {
-      await new Promise<void>((resolve) => {
-        const check = () => {
-          if (typeof window.grecaptcha === "undefined") {
-            setTimeout(check, 100);
-          } else {
-            resolve();
-          }
-        };
+  if (recaptcha) {
+    await new Promise<void>((resolve) => {
+      const check = () => {
+        if (typeof window.grecaptcha === "undefined") {
+          setTimeout(check, 100);
+        } else {
+          resolve();
+        }
+      };
 
-        check();
-      });
-    }
+      check();
+    });
   }
 }
 
@@ -183,7 +185,7 @@ router.beforeResolve(async (to, from, next) => {
   // this will only be null on first route
   if (from.name == null) {
     try {
-      await initAuth();
+      await initAuth(to);
     } catch (error) {
       console.error(error);
     }
