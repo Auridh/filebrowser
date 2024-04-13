@@ -2,7 +2,7 @@
   <div id="editor-container" :class="onlyOffice.fullViewport && 'full-viewport'">
     <header-bar v-if="!onlyOffice.fullViewport">
       <action icon="close" :label="$t('buttons.close')" @action="close()" />
-      <title>{{ req.name }}</title>
+      <title>{{ fileStore.req.name }}</title>
     </header-bar>
     <Breadcrumbs  v-if="!onlyOffice.fullViewport" base="/files" noLink />
     <errors v-if="error" :errorCode="error.status" />
