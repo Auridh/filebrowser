@@ -49,9 +49,9 @@ import {
   logoURL,
   recaptcha,
   recaptchaKey,
-  signup,
+  signup, authMethod,
 } from "@/utils/constants";
-import { inject, onMounted, ref } from "vue";
+import { inject, onBeforeMount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -113,6 +113,13 @@ const submit = async (event: Event) => {
     }
   }
 };
+
+onBeforeMount(() => {
+  if (authMethod == "proxy") {
+    window.location.reload();
+    return;
+  }
+})
 
 // Run hooks
 onMounted(() => {

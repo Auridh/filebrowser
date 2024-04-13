@@ -11,7 +11,7 @@ import ProfileSettings from "@/views/settings/Profile.vue";
 import Shares from "@/views/settings/Shares.vue";
 import Errors from "@/views/Errors.vue";
 import { useAuthStore } from "@/stores/auth";
-import { authMethod, baseURL, name } from "@/utils/constants";
+import { baseURL, name } from "@/utils/constants";
 import i18n from "@/i18n";
 import { recaptcha, loginPage } from "@/utils/constants";
 import { login, validateLogin } from "@/utils/auth";
@@ -193,11 +193,6 @@ router.beforeResolve(async (to, from, next) => {
 
   if (to.path.endsWith("/login") && authStore.isLoggedIn) {
     next({ path: "/files/" });
-    return;
-  }
-
-  if (to.path.endsWith("/login") && authMethod == "proxy") {
-    window.location.reload();
     return;
   }
 
