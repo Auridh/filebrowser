@@ -3,6 +3,7 @@ module github.com/Auridh/filebrowser/v2
 go 1.22
 
 require (
+	github.com/allegro/bigcache v1.2.1
 	github.com/asdine/storm/v3 v3.2.1
 	github.com/asticode/go-astisub v0.26.2
 	github.com/disintegration/imaging v1.6.2
@@ -16,6 +17,7 @@ require (
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pelletier/go-toml/v2 v2.2.1
+	github.com/sethvargo/go-password v0.2.0
 	github.com/shirou/gopsutil/v3 v3.24.3
 	github.com/spf13/afero v1.11.0
 	github.com/spf13/cobra v1.8.0
@@ -32,7 +34,6 @@ require (
 )
 
 require (
-	github.com/allegro/bigcache v1.2.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/asticode/go-astikit v0.42.0 // indirect
 	github.com/asticode/go-astits v1.13.0 // indirect
@@ -67,6 +68,7 @@ require (
 	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
 	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
+	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
