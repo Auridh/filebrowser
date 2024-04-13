@@ -74,6 +74,11 @@ const submit = async (event: Event) => {
   event.preventDefault();
   event.stopPropagation();
 
+  if (authMethod == "proxy") {
+    window.location.reload();
+    return;
+  }
+
   const redirect = (route.query.redirect || "/files/") as string;
 
   let captcha = "";
@@ -113,13 +118,6 @@ const submit = async (event: Event) => {
     }
   }
 };
-
-onBeforeMount(() => {
-  if (authMethod == "proxy") {
-    window.location.reload();
-    return;
-  }
-})
 
 // Run hooks
 onMounted(() => {
