@@ -4,7 +4,7 @@
       <action icon="close" :label="$t('buttons.close')" @action="close()" />
       <title>{{ req.name }}</title>
     </header-bar>
-    <breadcrumbs  v-if="!onlyOffice.fullViewport" base="/files" noLink />
+    <Breadcrumbs  v-if="!onlyOffice.fullViewport" base="/files" noLink />
     <errors v-if="error" :errorCode="error.status" />
     <div id="editor">
       <div id="onlyoffice-editor"></div>
@@ -18,8 +18,7 @@
   }
 </style>
 
-<script>
-import { mapState } from "vuex";
+<script setup lang="ts">
 import url from "@/utils/url";
 import { onlyOffice } from "@/utils/constants";
 
@@ -27,105 +26,65 @@ import HeaderBar from "@/components/header/HeaderBar.vue";
 import Action from "@/components/header/Action.vue";
 import Breadcrumbs from "@/components/Breadcrumbs.vue";
 import Errors from "@/views/Errors.vue";
-import { fetchJSON } from "@/api/utils";
+import { fetchJSON, StatusError } from "@/api/utils";
+import { useFileStore } from "@/stores/file.js";
+import { useRoute, useRouter } from "vue-router";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
-export default {
-  name: "onlyofficeeditor",
-  components: {
-    HeaderBar,
-    Action,
-    Breadcrumbs,
-    Errors,
-  },
-  data: function () {
-    return {
-      error: null,
-      clientConfig: null,
-      onlyOffice,
-    };
-  },
-  computed: {
-    ...mapState(["req", "user", "jwt"]),
-    breadcrumbs() {
-      let parts = this.$route.path.split("/");
+const fileStore = useFileStore();
+const route = useRoute();
+const router = useRouter();
 
-      if (parts[0] === "") {
-        parts.shift();
-      }
+const error = ref<StatusError | null>(null);
+const editor = ref<DocsAPI.DocEditor | null>(null);
 
-      if (parts[parts.length - 1] === "") {
-        parts.pop();
-      }
+onMounted(() => {
+  const isMobile = window.innerWidth <= 736;
+  const clientConfigPromise = fetchJSON(
+    `/api/onlyoffice/client-config${fileStore.req.path}?isMobile=${isMobile}`);
+  window.addEventListener("keydown", keyEvent);
 
-      let breadcrumbs = [];
+  const scriptUrl = `${onlyOffice.url}/web-apps/apps/api/documents/api.js`;
+  const onlyofficeScript = document.createElement("script");
+  onlyofficeScript.setAttribute("src", scriptUrl);
+  document.head.appendChild(onlyofficeScript);
 
-      for (let i = 0; i < parts.length; i++) {
-        breadcrumbs.push({ name: decodeURIComponent(parts[i]) });
-      }
+  onlyofficeScript.onload = async () => {
+    try {
+      const clientConfig = await clientConfigPromise;
+      // eslint-disable-next-line no-undef
+      editor.value = new DocsAPI.DocEditor("onlyoffice-editor", clientConfig);
+    } catch (e) {
+      error.value = e;
+    }
+  };
+});
 
-      breadcrumbs.shift();
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", keyEvent);
+  editor.value.destroyEditor();
+});
 
-      if (breadcrumbs.length > 3) {
-        while (breadcrumbs.length !== 4) {
-          breadcrumbs.shift();
-        }
+const back = () => {
+  let uri = url.removeLastDir(route.path) + "/";
+  router.push({ path: uri });
+};
+const keyEvent = (event) => {
+  if (!event.ctrlKey && !event.metaKey) {
+    return;
+  }
 
-        breadcrumbs[0].name = "...";
-      }
+  if (String.fromCharCode(event.which).toLowerCase() !== "s") {
+    return;
+  }
 
-      return breadcrumbs;
-    },
-  },
-  created() {
-    const isMobile = window.innerWidth <= 736;
-    this.clientConfigPromise = fetchJSON(
-      `/api/onlyoffice/client-config${this.req.path}?isMobile=${isMobile}`
-    );
-    window.addEventListener("keydown", this.keyEvent);
-  },
-  beforeDestroy() {
-    window.removeEventListener("keydown", this.keyEvent);
-    this.editor.destroyEditor();
-  },
-  mounted: function () {
-    const scriptUrl = `${onlyOffice.url}/web-apps/apps/api/documents/api.js`;
-    const onlyofficeScript = document.createElement("script");
-    onlyofficeScript.setAttribute("src", scriptUrl);
-    document.head.appendChild(onlyofficeScript);
+  event.preventDefault();
+  this.save();
+};
+const close = () => {
+  fileStore.updateRequest(null)
 
-    onlyofficeScript.onload = async () => {
-      try {
-        const clientConfig = await this.clientConfigPromise;
-        // eslint-disable-next-line no-undef
-        this.editor = new DocsAPI.DocEditor("onlyoffice-editor", clientConfig);
-      } catch (e) {
-        this.error = e;
-      }
-    };
-  },
-  methods: {
-    back() {
-      let uri = url.removeLastDir(this.$route.path) + "/";
-      this.$router.push({ path: uri });
-    },
-    keyEvent(event) {
-      if (!event.ctrlKey && !event.metaKey) {
-        return;
-      }
-
-      if (String.fromCharCode(event.which).toLowerCase() !== "s") {
-        return;
-      }
-
-      event.preventDefault();
-      this.save();
-    },
-    close() {
-      this.$store.commit("updateRequest", {});
-
-      let uri = url.removeLastDir(this.$route.path) + "/";
-      this.$router.push({ path: uri });
-    },
-  },
+  let uri = url.removeLastDir(route.path) + "/";
+  router.push({ path: uri });
 };
 </script>
