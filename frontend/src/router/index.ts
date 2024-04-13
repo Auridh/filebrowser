@@ -152,22 +152,20 @@ const routes = [
 async function initAuth() {
   if (loginPage) {
     await validateLogin();
-  } else {
-    await login("", "", "");
-  }
 
-  if (recaptcha) {
-    await new Promise<void>((resolve) => {
-      const check = () => {
-        if (typeof window.grecaptcha === "undefined") {
-          setTimeout(check, 100);
-        } else {
-          resolve();
-        }
-      };
+    if (recaptcha) {
+      await new Promise<void>((resolve) => {
+        const check = () => {
+          if (typeof window.grecaptcha === "undefined") {
+            setTimeout(check, 100);
+          } else {
+            resolve();
+          }
+        };
 
-      check();
-    });
+        check();
+      });
+    }
   }
 }
 
