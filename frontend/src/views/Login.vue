@@ -51,13 +51,13 @@ import {
   recaptchaKey,
   signup, authMethod,
 } from "@/utils/constants";
-import { inject, onBeforeMount, onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 if (authMethod == "proxy") {
   window.location.reload();
-  return;
+  throw new Error("u shouldn't be here");
 }
 
 // Define refs
