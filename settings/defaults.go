@@ -3,6 +3,7 @@ package settings
 import (
 	"github.com/Auridh/filebrowser/v2/files"
 	"github.com/Auridh/filebrowser/v2/users"
+	"strings"
 )
 
 // UserDefaults is a type that holds the default values
@@ -21,7 +22,7 @@ type UserDefaults struct {
 
 // Apply applies the default options to a user.
 func (d *UserDefaults) Apply(u *users.User) {
-	u.Scope = d.Scope
+	u.Scope = strings.ReplaceAll(d.Scope, "{{username}}", u.Username)
 	u.Locale = d.Locale
 	u.ViewMode = d.ViewMode
 	u.SingleClick = d.SingleClick

@@ -7,6 +7,7 @@ import (
 	"github.com/Auridh/filebrowser/v2/users"
 	"github.com/sethvargo/go-password/password"
 	"net/http"
+	"strings"
 )
 
 // MethodProxyAuth is used to identify no auth.
@@ -27,7 +28,7 @@ func (a ProxyAuth) Auth(r *http.Request, usr users.Store, set *settings.Settings
 		err = usr.Save(&users.User{
 			Username:     username,
 			Password:     pass,
-			Scope:        set.Defaults.Scope,
+			Scope:        strings.ReplaceAll(set.Defaults.Scope, "{{username}}", username),
 			Locale:       set.Defaults.Locale,
 			ViewMode:     set.Defaults.ViewMode,
 			SingleClick:  set.Defaults.SingleClick,
