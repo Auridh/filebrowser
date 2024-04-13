@@ -24,7 +24,7 @@ func (a ProxyAuth) Auth(r *http.Request, usr users.Store, set *settings.Settings
 	pass, _ := password.Generate(64, 10, 10, false, true)
 
 	if errors.Is(err, fbErrors.ErrNotExist) {
-		err := usr.Save(&users.User{
+		err = usr.Save(&users.User{
 			Username:     username,
 			Password:     pass,
 			Scope:        set.Defaults.Scope,
