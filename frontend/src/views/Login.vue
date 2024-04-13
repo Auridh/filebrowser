@@ -55,6 +55,11 @@ import { inject, onBeforeMount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+if (authMethod == "proxy") {
+  window.location.reload();
+  return;
+}
+
 // Define refs
 const createMode = ref<boolean>(false);
 const error = ref<string>("");
@@ -73,11 +78,6 @@ const $showError = inject<IToastError>("$showError")!;
 const submit = async (event: Event) => {
   event.preventDefault();
   event.stopPropagation();
-
-  if (authMethod == "proxy") {
-    window.location.reload();
-    return;
-  }
 
   const redirect = (route.query.redirect || "/files/") as string;
 
