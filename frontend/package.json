@@ -25,11 +25,11 @@
     "core-js": "^3.36.1",
     "dayjs": "^1.11.10",
     "filesize": "^10.1.1",
+    "jose": "^4.13.1",
     "js-base64": "^3.7.7",
     "jwt-decode": "^4.0.0",
     "lodash-es": "^4.17.21",
     "material-icons": "^1.13.12",
-    "jose": "^4.13.1",
     "normalize.css": "^8.0.1",
     "pinia": "^2.1.7",
     "pretty-bytes": "^6.1.1",
@@ -44,7 +44,8 @@
     "vue-i18n": "^9.10.2",
     "vue-lazyload": "^3.0.0",
     "vue-router": "^4.3.0",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^4.0.0",
