@@ -82,15 +82,18 @@ const submit = async (event: Event) => {
     uri = url.removeLastDir(uri) + "/";
   }
 
-  uri += encodeURIComponent(name.value) + "/";
+  let uriEncoded = uri + encodeURIComponent(name.value) + "/";
+  uriEncoded = uriEncoded.replace("//", "/");
+
+  uri += name.value + "/";
   uri = uri.replace("//", "/");
 
   try {
     await api.post(uri);
     if (props.redirect) {
-      router.push({ path: uri });
+      router.push({ path: uriEncoded });
     } else if (!props.base) {
-      const res = await api.fetch(url.removeLastDir(uri) + "/");
+      const res = await api.fetch(url.removeLastDir(uriEncoded) + "/");
       fileStore.updateRequest(res);
     }
   } catch (e) {
